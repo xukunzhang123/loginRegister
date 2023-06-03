@@ -155,5 +155,30 @@ In [24]: user2.save()
 
 IntegrityError: UNIQUE constraint failed: login_siteuser.email
 
+(loginRegister) PS C:\Users\ZXK\PycharmProjects\day_08\loginRegister> git add *
+(loginRegister) PS C:\Users\ZXK\PycharmProjects\day_08\loginRegister> git commit -m "添加数据库模型设置"
+On branch master
+nothing to commit, working tree clean
+(loginRegister) PS C:\Users\ZXK\PycharmProjects\day_08\loginRegister> git log
+commit bc771d2ae30da0b1235995d4df5c4892275273f7 (HEAD -> master)
+Author: unknown <1002723982@qq.com>
+Date:   Sun Jun 4 00:01:04 2023 +0800
 
+    loginRegister 项目
+
+# 数据库模型后台管理
+loginRegister／admin.py　
+
+from django.contrib import admin
+
+from login.models import SiteUser
+
+# Register your models here.
+class SiteUserAdmin(admin.ModelAdmin):
+    list_display = ['name','gender','email']
+    list_display_links = ['name']
+    list_filter = ['gender','create_time']
+
+# Alt + 回车自动导入
+admin.site.register(SiteUser,SiteUserAdmin)
 """
