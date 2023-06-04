@@ -45,5 +45,14 @@ F the next time Git touches it
 5. 查看历史提交记录
 git log
 Password (again):
+
+
+新建分支：
+git branch name     # 新建分支
+git branch          # 查看分支
+pycharm             # 右下角可以切换分支、新建分支等
+git log             # 查看提交历史
+git reset --hard    # 返回到某一个的状态
+
 """
 

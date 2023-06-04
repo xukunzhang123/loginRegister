@@ -27,6 +27,9 @@ def login(request):
             user = SiteUser.objects.filter(name=username, passwoed=password).first()
             if user:
                 # 用户存在
+                request.session['is_login'] = True
+                request.session['user_id'] = user.id
+                request.session['username'] = user.name
                 return redirect('/index/')
             else:
                 message = "用户名或密码错误"
@@ -44,6 +47,8 @@ def register(request):
 
 
 def logout(request):
-    pass
+    #如果状态不是登录状态无法登出
+    if request.session.get('is_login'):
+        request.session.flush() #清空session信息
     # redirect 重定向，跳转
     return redirect('/login/')
