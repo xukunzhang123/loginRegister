@@ -56,6 +56,8 @@ git reset --hard    # 返回到某一个的状态
 
 将本地仓库和远程仓库关联起来。
 git remote add origin https://github.com/xukunzhang123/loginRegister.git
+git push
+git push --set-upstream origin master
 
 """
 
