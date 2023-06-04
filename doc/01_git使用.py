@@ -54,5 +54,8 @@ pycharm             # 右下角可以切换分支、新建分支等
 git log             # 查看提交历史
 git reset --hard    # 返回到某一个的状态
 
+将本地仓库和远程仓库关联起来。
+git remote add origin https://github.com/xukunzhang123/loginRegister.git
+
 """
 
