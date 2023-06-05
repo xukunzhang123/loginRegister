@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 
+from login.forms import LoginForm
 from login.models import SiteUser
 
 
@@ -13,14 +14,18 @@ def index(request):
 def login(request):
     # print(request.method) #加上{% csrf_token %} 请求从GET 变为 POST
     if request.method == "POST":
-        # print(request.POST)
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get('username')
+            password = login_form.cleaned_data.get('password')
+        #print(request.POST)
         # <QueryDict: {'csrfmiddlewaretoken': ['xUyK3Ml4vad1hK2amnUK9q7zfkqMmsUH7MzfM1CZdf6342EYzx2dllv1OPQVZaBc']}>
         # 在前端加上name之后便可得到信息
         # <QueryDict: {'csrfmiddlewaretoken': ['ELHyNfYu44549l6Oh1BEzae9sUD8y6rXeDI3wufpM9Y6WDICubJ7L5CB1p3hbO8s'], 'username': ['user1'], 'password': ['user1']}>
         # 拿到登录信息之后便能可以去数据库对比
-        username = request.POST.get('username').strip()
-        password = request.POST.get('password').strip()
-        if username and password:
+        #username = request.POST.get('username').strip()
+        #password = request.POST.get('password').strip()
+        #if username and password:
             # 1.用户名是否合法（在数据库中是否存在）
             # 密码是否合法（填写的密码是否和数据库一致）
             # 其他验证
@@ -33,12 +38,15 @@ def login(request):
                 return redirect('/index/')
             else:
                 message = "用户名或密码错误"
-                return render(request, 'login/login.html',{'message':message})
+                #return render(request, 'login/login.html',{'message':message})
+                return render(request, 'login/login.html',locals())
         else:
-            message = "非法的数据信息"
-            return render(request, 'login/login.html', {'message': message})
+            message = "填写的登录信息不合法"
+            # return render(request, 'login/login.html', {'message': message})
+            return render(request, 'login/login.html', locals())
         #return redirect('/index/')
-    return render(request, 'login/login.html')
+    login_form = LoginForm()
+    return render(request, 'login/login.html',locals())
 
 
 def register(request):
