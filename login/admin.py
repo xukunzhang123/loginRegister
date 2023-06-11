@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from login.models import SiteUser
+from login.models import SiteUser, ConfirmString
 
 # Register your models here.
 
@@ -13,3 +13,4 @@ class SiteUserAdmin(admin.ModelAdmin):
 
 # Alt + 回车自动导入
 admin.site.register(SiteUser,SiteUserAdmin)
+admin.site.register(ConfirmString)
