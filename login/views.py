@@ -1,8 +1,11 @@
+from datetime import datetime, timedelta
+
 from django.shortcuts import render, redirect
 
 from login.forms import LoginForm, RegisterForm
-from login.models import SiteUser
+from login.models import SiteUser, ConfirmString
 from login.utils import hash_code, make_confirm_string, send_email
+from loginRegister import settings
 
 
 # Create your views here.
@@ -32,6 +35,9 @@ def login(request):
             # 其他验证
             user = SiteUser.objects.filter(name=username, passwoed=hash_code(password)).first()
             if user:
+                if not user.has_confirmed:
+                    message = "该用户未进行邮件确认!"
+                    return render(request, 'login/login.html', locals())
                 # 用户存在is_login
                 request.session['is_login'] = True
                 request.session['user_id'] = user.id
@@ -103,3 +109,25 @@ def logout(request):
         request.session.flush()  # 清空session信息
     # redirect 重定向，跳转
     return redirect('/login/')
+
+def user_confirm(request):
+    code = request.GET.get('code', None)
+    message = ''
+    try:
+        confirm = ConfirmString.objects.get(code=code)
+    except:
+        message = '无效的确认请求'
+        return render(request, 'login/confirm.html', locals())
+
+    create_time = confirm.create_time
+    now = datetime.now()
+    if now > create_time + timedelta(settings.CONFIRM_DAYS):
+        confirm.user.delete()
+        message = '您的邮件已经过期！请重新注册！'
+    else:
+        confirm.user.is_confirmed = True
+        confirm.user.save()
+        confirm.delete()
+        message = "感谢确认，请使用账户登录！"
+    return render(request, 'login/confirm.html', locals())
+
